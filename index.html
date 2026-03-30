@@ -652,7 +652,11 @@ const medicineData=[
             document.getElementById('counter').innerText = `${index + 1} / ${medicineData.length}`;
         }
 
-        function toggleFlip() { cardElement.classList.toggle('flipped'); }
+               function toggleFlip() { 
+            const text =document.getElementById('front-face').textContent;
+            cardElement.classList.toggle('flipped'); 
+              navigator.clipboard.writeText(text);
+        }
 
         function changeCard(step, e) {
             e.stopPropagation();
