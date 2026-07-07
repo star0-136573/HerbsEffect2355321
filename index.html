@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,17 +10,17 @@
 
         body { 
             font-family: 'PingFang HK', sans-serif; background-color: var(--bg); color: var(--text); 
-            display: flex; flex-direction: column; align-items: center; height: 100vh; margin: 0; transition: 0.3s; overflow: hidden; 
+            display: flex; flex-direction: column; align-items: center; height: 90vh; margin: 0; transition: 0.3s; overflow: hidden; 
         }
 
-        .header { width: 95%; max-width: 500px; display: flex; justify-content: space-between; padding: 10px; flex-shrink: 0; }
-        .container { flex-grow: 1; width: 90%; max-width: 500px; perspective: 1000px; display: flex; align-items: center; justify-content: center; min-height: 0; }
+        .header { width: 95%; max-width: 500px; display: flex; justify-content: space-between; padding: 5px; flex-shrink: 0; }
+        .container { flex-grow: 1; width: 95%; max-width: 550px; perspective: 900px; display: flex; align-items: center; justify-content: center; min-height: 0; }
         
-        .flashcard { width: 100%; height: 85%; max-height: 500px; position: relative; transform-style: preserve-3d; transition: transform 0.6s; cursor: pointer; }
+        .flashcard { width: 90%; height: 85%; max-height: 500px; position: relative; transform-style: preserve-3d; transition: transform 0.6s; cursor: pointer; }
         .flashcard.flipped { transform: rotateY(180deg); }
         
         .card-face { 
-            position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; 
+            position: absolute; width: 90%; height: 90%; backface-visibility: hidden; border-radius: 20px; 
             box-shadow: 0 8px 20px var(--shadow); background: var(--card-bg); border: 1px solid rgba(128, 128, 128, 0.1); 
             display: flex; flex-direction: column; padding: 1.5rem; box-sizing: border-box;
         }
@@ -37,11 +36,11 @@
         .symptom-tag-container { display: flex; flex-wrap: wrap; gap: 4px; }
         .symptom-tag { font-size: 0.75rem; background: rgba(99, 102, 241, 0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(99, 102, 241, 0.2); }
 
-        .formula-list { font-size: 0.85rem; line-height: 1.5; }
+        .formula-list { font-size: 1.15rem; line-height: 1.5; }
         .formula-row { border-bottom: 1px solid rgba(0,0,0,0.05); padding: 3px 0; display: flex; justify-content: space-between; gap: 10px; }
 
-        .controls { padding: 10px; display: flex; gap: 5px; align-items: center; flex-shrink: 0; }
-        button, select { background: var(--primary); color: white; border: none; padding: 6px 8px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+        .controls { padding: 10px; display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+        button, select { background: var(--primary); color: white; border: none; padding: 8px 12px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
         .secondary { background: #64748b; }
         .mode-btn { background: #10b981; }
     </style>
@@ -53,7 +52,8 @@
             <option value="light">☀️ Light</option>
             <option value="dark">🌙 Dark</option>
         </select>
-        <button class="mode-btn" id="modeBtn" onclick="toggleMode()">Mode: Syndrome View</button>
+          <button onclick="shuffleDeck()">🔀 Shuffle</button>
+        <button class="mode-btn" id="modeBtn" onclick="toggleMode()">Mode: Disease</button>
     </div>
 
     <div class="container">
@@ -67,14 +67,12 @@
         <button class="secondary" onclick="prevCard()">←</button>
         <span id="counter" style="font-weight:bold; min-width: 45px; text-align: center;">1 / 1</span>
         <button class="secondary" onclick="nextCard()">→</button>
-        <button onclick="shuffleDeck()">Shuff</button>
-        <button onclick="select('I')">In</button>
+      
+        <button onclick="select('I')">Int</button>
         <button onclick="select('G')">Gyneco</button>
         <button onclick="select('P')">Pedi</button> 
-
-
-  <script>
-const internal=[
+        <script>
+            const internal=[
   {
     "disease": "感冒 ",
     "syndromes": [
@@ -4363,9 +4361,7 @@ const tcmData3 = [
 
 ];
 
-  </script>
-
-      
+        </script>
     <script>
         var  disease = internal.concat(gynecology).concat(pediatric);
         var tcmData = tcmData1.concat(tcmData2).concat(tcmData3);
@@ -4374,7 +4370,7 @@ const tcmData3 = [
 
         let currentDeck = [];
         let currentIndex = 0;
-        let isDiseaseMode = false;
+        let isDiseaseMode = true;
 
         function select(s){
            if(s=='I') disease = internal;
@@ -4418,14 +4414,16 @@ const tcmData3 = [
             if (data.type === 'disease') {
                 front.innerHTML = `<div style="opacity:0.6">Disease Mastery</div><div class="disease-title">${data.disease}</div>`;
                 back.innerHTML = `
-                    <div class="section-header">Syndromes & Symptoms</div>
+                    
+                     ${formulaHtml}
+                     <div class="section-header">Syndromes & Symptoms</div>
                     ${data.syndromes.map(s => `
                         <div class="syndrome-item-box">
                             <span class="syndrome-name-text">${s.name}</span>
                             <div class="symptom-tag-container">${s.symptoms.map(sym => `<span class="symptom-tag">${sym}</span>`).join('')}</div>
                         </div>
                     `).join('')}
-                    ${formulaHtml}
+                   
                 `;
             } else {
                 front.innerHTML = `<div style="color:var(--primary); font-weight:bold">${data.disease}</div><div class="disease-title" style="font-size:2.2rem">${data.name}</div>`;
